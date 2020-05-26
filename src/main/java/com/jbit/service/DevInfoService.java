@@ -3,9 +3,11 @@ package com.jbit.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jbit.entity.AppInfo;
+import com.jbit.json.jsonresult;
 import com.jbit.mapper.AppInfoMapper;
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Appinfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -24,6 +26,14 @@ public class DevInfoService {
 
     @Resource
     private AppVersionService appVersionService;
+
+    //验证apkName是否重复
+    public AppInfo apkexist(String akpName){
+        AppInfo appInfo=new AppInfo();
+        appInfo.setApkname(akpName);
+        return appInfoMapper.selectOne(appInfo);
+    }
+
 
     public PageInfo<AppInfo> queryInfo(Long id, Integer pageIndexs, String querySoftwareName, Long queryStatus, Long devid, Integer queryCategoryLevel1, Integer queryCategoryLevel2, Integer queryCategoryLevel3){
         Example example=new Example(AppInfo.class);
@@ -74,5 +84,8 @@ public class DevInfoService {
 
     }
 
-
+    @Transactional
+    public void seve(AppInfo appInfo) {
+        appInfoMapper.insertSelective(appInfo);
+    }
 }
