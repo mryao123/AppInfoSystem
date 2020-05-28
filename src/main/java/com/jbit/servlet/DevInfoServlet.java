@@ -12,10 +12,7 @@ import com.mysql.fabric.xmlrpc.base.Data;
 import com.mysql.fabric.xmlrpc.base.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.awt.SunHints;
 import sun.management.jmxremote.ConnectorBootstrap;
@@ -41,6 +38,63 @@ public class DevInfoServlet {
     //状态和平台查询
     @Resource
     private DevDictionaryService devDictionaryService;
+
+    //删除图片
+    @RequestMapping("/delfile")
+    @ResponseBody
+    public jsonresult delfile(Long id,String flag){
+        AppInfo appInfo = devInfoService.qureyByid(id);
+        if(flag.equals("logo")){
+            try {
+                //通过绝对路径删除图片
+                File file=new File(appInfo.getLogolocpath());
+                file.delete();
+                //清空数据库里面的数据
+                appInfo.setLogolocpath("");
+                appInfo.setLogopicpath("");
+                devInfoService.update(appInfo);
+                return new jsonresult(true);
+            } catch (Exception e) {
+                return new jsonresult(false);
+            }
+        }
+        return new jsonresult(false);
+    }
+
+    //修改查询
+    @RequestMapping("/appinfomodify/{id}")
+    public String ModifyT(Model model,@PathVariable(name = "id")Long id){
+        model.addAttribute("appInfo",devInfoService.qureyByid(id));
+        System.out.println(devInfoService.qureyByid(id));
+        return "jsp/developer/appinfomodify";
+    }
+
+//    修改
+@RequestMapping("/appinfomodify")
+public String appinfomodify(HttpSession session,AppInfo appInfo, MultipartFile attach){
+
+   if(!attach.isEmpty()){
+       System.out.println("empty");
+       //1实现文件上传     服务器图片存放位置
+       String server_path=session.getServletContext().getRealPath("/statics/uploadfiles");
+       //省略图片大小和图片规格        文件路径和文件名
+       try {
+           attach.transferTo(new File(server_path,attach.getOriginalFilename()));
+           appInfo.setLogolocpath(server_path+attach.getOriginalFilename()); //绝对路径
+           appInfo.setLogopicpath("/statics/uploadfiles/"+attach.getOriginalFilename());//相对路径
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+   }
+    //app修改
+    DevUser devUserSession = (DevUser) session.getAttribute("devUserSession");
+    appInfo.setDevid(devUserSession.getId());
+    appInfo.setModifyby(appInfo.getId());
+    appInfo.setModifydate(new Date());
+    devInfoService.update(appInfo);
+    return "redirect:/list/applist";
+
+}
 
     //验证apkNameexist
     @RequestMapping("/apkexist")
@@ -115,7 +169,7 @@ public class DevInfoServlet {
         appInfo.setCreatedby(appInfo.getId());
         appInfo.setCreationdate(new Date());
         appInfo.setLogolocpath(server_path+"/"+uploadFile.getOriginalFilename()); //绝对路径
-        appInfo.setLogopicpath("/static/uploadfiles/"+uploadFile.getOriginalFilename());//相对路径
+        appInfo.setLogopicpath("/statics/uploadfiles/"+uploadFile.getOriginalFilename());//相对路径
         System.out.println(appInfo);
         devInfoService.seve(appInfo);
 

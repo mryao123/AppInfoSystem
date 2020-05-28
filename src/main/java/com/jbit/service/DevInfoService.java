@@ -88,4 +88,15 @@ public class DevInfoService {
     public void seve(AppInfo appInfo) {
         appInfoMapper.insertSelective(appInfo);
     }
+
+    public AppInfo qureyByid(Long id) {
+        //处理转台名字
+        AppInfo appInfo = appInfoMapper.selectByPrimaryKey(id);
+        appInfo.setStatusname(devDictionaryService.qureydata("APP_STATUS",appInfo.getStatus()).getValuename());
+        return appInfo;
+    }
+
+    public void update(AppInfo appInfo) {
+        appInfoMapper.updateByPrimaryKeySelective(appInfo);
+    }
 }

@@ -16,6 +16,7 @@ public class DataDictionaryServlet {
 
     @RequestMapping("/datadictionarylist")
     public List<DataDictionary> qureyList(String tcode){
+
         return devDictionaryService.qureydatalist(tcode);
     }
 
