@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -51,6 +53,12 @@ public class AppVersion implements Serializable {
 
     @Column(name = "apkFileName")
     private String apkfilename;
+
+    @Transient
+    private String appname;
+
+    @Transient
+    private String publishstatusname;
 
     private static final long serialVersionUID = 1L;
 }

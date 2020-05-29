@@ -19,6 +19,7 @@ import sun.management.jmxremote.ConnectorBootstrap;
 import sun.management.snmp.AdaptorBootstrap;
 
 import javax.annotation.Resource;
+import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -168,7 +169,7 @@ public String appinfomodify(HttpSession session,AppInfo appInfo, MultipartFile a
         appInfo.setDevid(devUserSession.getId());
         appInfo.setCreatedby(appInfo.getId());
         appInfo.setCreationdate(new Date());
-        appInfo.setLogolocpath(server_path+"/"+uploadFile.getOriginalFilename()); //绝对路径
+        appInfo.setLogolocpath(server_path+uploadFile.getOriginalFilename()); //绝对路径
         appInfo.setLogopicpath("/statics/uploadfiles/"+uploadFile.getOriginalFilename());//相对路径
         System.out.println(appInfo);
         devInfoService.seve(appInfo);
@@ -177,5 +178,32 @@ public String appinfomodify(HttpSession session,AppInfo appInfo, MultipartFile a
 
     }
 
+
+    //删除
+    @RequestMapping("/Infodelete")
+    @ResponseBody
+    public jsonresult Infodelete(Long id){
+        System.out.println("id="+id);
+        int infoi = devInfoService.InfoDel(id);
+        System.out.println(infoi);
+        if(infoi>0){
+            System.out.println("ture");
+            return new jsonresult(true);
+        }
+        return new jsonresult(false);
+    }
+
+
+    @RequestMapping("/qureybyidKey/{id}")
+    public String qureyByidKey(Model model,@PathVariable Long id){
+        AppInfo appInfo = devInfoService.qureyByidKey(id);
+        appInfo.setFlatformname(devDictionaryService.qureydata("APP_FLATFORM",appInfo.getFlatformid()).getValuename());
+        appInfo.setStatusname(devDictionaryService.qureydata("APP_STATUS",appInfo.getStatus()).getValuename());
+        appInfo.setCategorylevel1name(appCategoryService.qureyid(appInfo.getCategorylevel1()).getCategoryname());
+        appInfo.setCategorylevel2name(appCategoryService.qureyid(appInfo.getCategorylevel2()).getCategoryname());
+        appInfo.setCategorylevel3name(appCategoryService.qureyid(appInfo.getCategorylevel3()).getCategoryname());
+        model.addAttribute("appInfo",appInfo);
+        return "jsp/developer/appinfoview";
+    }
 
 }

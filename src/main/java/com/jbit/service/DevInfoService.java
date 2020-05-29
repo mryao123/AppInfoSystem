@@ -3,9 +3,7 @@ package com.jbit.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jbit.entity.AppInfo;
-import com.jbit.json.jsonresult;
 import com.jbit.mapper.AppInfoMapper;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Appinfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
@@ -95,8 +93,16 @@ public class DevInfoService {
         appInfo.setStatusname(devDictionaryService.qureydata("APP_STATUS",appInfo.getStatus()).getValuename());
         return appInfo;
     }
+    public AppInfo qureyByidKey(Long id){
+        return appInfoMapper.selectByPrimaryKey(id);
+    }
 
     public void update(AppInfo appInfo) {
         appInfoMapper.updateByPrimaryKeySelective(appInfo);
+    }
+
+    public int InfoDel(Long id) {
+        int i = appInfoMapper.deleteByPrimaryKey(id);
+        return i;
     }
 }
