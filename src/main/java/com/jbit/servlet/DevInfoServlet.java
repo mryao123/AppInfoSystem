@@ -6,10 +6,12 @@ import com.jbit.entity.AppInfo;
 import com.jbit.entity.DevUser;
 import com.jbit.json.jsonresult;
 import com.jbit.service.AppCategoryService;
+import com.jbit.service.AppVersionService;
 import com.jbit.service.DevDictionaryService;
 import com.jbit.service.DevInfoService;
 import com.mysql.fabric.xmlrpc.base.Data;
 import com.mysql.fabric.xmlrpc.base.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +41,10 @@ public class DevInfoServlet {
     //状态和平台查询
     @Resource
     private DevDictionaryService devDictionaryService;
+
+    //版本
+    @Autowired
+    private AppVersionService appVersionService;
 
     //删除图片
     @RequestMapping("/delfile")
@@ -183,17 +189,17 @@ public String appinfomodify(HttpSession session,AppInfo appInfo, MultipartFile a
     @RequestMapping("/Infodelete")
     @ResponseBody
     public jsonresult Infodelete(Long id){
-        System.out.println("id="+id);
+        //删除app
         int infoi = devInfoService.InfoDel(id);
-        System.out.println(infoi);
+        //删除app对应的版本
+        appVersionService.delVertion(id);
         if(infoi>0){
-            System.out.println("ture");
             return new jsonresult(true);
         }
         return new jsonresult(false);
     }
 
-
+        //查看
     @RequestMapping("/qureybyidKey/{id}")
     public String qureyByidKey(Model model,@PathVariable Long id){
         AppInfo appInfo = devInfoService.qureyByidKey(id);
@@ -203,6 +209,8 @@ public String appinfomodify(HttpSession session,AppInfo appInfo, MultipartFile a
         appInfo.setCategorylevel2name(appCategoryService.qureyid(appInfo.getCategorylevel2()).getCategoryname());
         appInfo.setCategorylevel3name(appCategoryService.qureyid(appInfo.getCategorylevel3()).getCategoryname());
         model.addAttribute("appInfo",appInfo);
+        //查看历史版本
+        model.addAttribute("appVersionList",appVersionService.qureyidList(appInfo.getId()));
         return "jsp/developer/appinfoview";
     }
 

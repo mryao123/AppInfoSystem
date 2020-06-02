@@ -167,14 +167,14 @@
 						<tbody>
 							<c:forEach var="appVersion" items="${appVersionList }" varStatus="status">
 								<tr role="row" class="odd">
-									<td tabindex="0" class="sorting_1">${appVersion.appName}</td>
-									<td>${appVersion.versionNo }</td>
-									<td>${appVersion.versionSize }</td>
-									<td>${appVersion.publishStatusName }</td>
+									<td tabindex="0" class="sorting_1">${appVersion.appname}</td>
+									<td>${appVersion.versionno }</td>
+									<td>${appVersion.versionsize }</td>
+									<td>${appVersion.publishstatusname }</td>
 									<td>
-									<a href="${appVersion.downloadLink }">${appVersion.apkFileName }</a>
+									<a href="${appVersion.downloadlink }">${appVersion.apkfilename }</a>
 									</td>
-									<td><fmt:formatDate value="${appVersion.modifyDate }" pattern="yyyy-MM-dd"/></td>
+									<td><fmt:formatDate value="${appVersion.modifydate }" pattern="yyyy-MM-dd"/></td>
 								</tr>
 							</c:forEach>
 						</tbody>

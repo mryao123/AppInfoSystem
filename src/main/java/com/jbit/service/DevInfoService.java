@@ -71,7 +71,7 @@ public class DevInfoService {
             app.setCategorylevel1name(appCategoryService.qureyid(app.getCategorylevel1()).getCategoryname());
             app.setCategorylevel2name(appCategoryService.qureyid(app.getCategorylevel2()).getCategoryname());
             app.setCategorylevel3name(appCategoryService.qureyid(app.getCategorylevel3()).getCategoryname());
-            app.setFlatformname(devDictionaryService.qureydata("APP_STATUS",app.getStatus()).getValuename());
+            app.setStatusname(devDictionaryService.qureydata("APP_STATUS",app.getStatus()).getValuename());
 //
            if(app.getVersionid()!=null){
                app.setVersionno(appVersionService.qureyid(app.getVersionid()).getVersionno());
@@ -90,9 +90,25 @@ public class DevInfoService {
     public AppInfo qureyByid(Long id) {
         //处理转台名字
         AppInfo appInfo = appInfoMapper.selectByPrimaryKey(id);
-        appInfo.setStatusname(devDictionaryService.qureydata("APP_STATUS",appInfo.getStatus()).getValuename());
+        bindingappby(appInfo);
         return appInfo;
     }
+
+    private void bindingappby(AppInfo app) {
+        app.setFlatformname(devDictionaryService.qureydata("APP_FLATFORM",app.getFlatformid()).getValuename());
+        app.setCategorylevel1name(appCategoryService.qureyid(app.getCategorylevel1()).getCategoryname());
+        app.setCategorylevel2name(appCategoryService.qureyid(app.getCategorylevel2()).getCategoryname());
+        app.setCategorylevel3name(appCategoryService.qureyid(app.getCategorylevel3()).getCategoryname());
+        app.setStatusname(devDictionaryService.qureydata("APP_STATUS",app.getStatus()).getValuename());
+//
+        if(app.getVersionid()!=null){
+            app.setVersionno(appVersionService.qureyid(app.getVersionid()).getVersionno());
+        }else{
+            app.setVersionno(null);
+        }
+    }
+
+
     public AppInfo qureyByidKey(Long id){
         return appInfoMapper.selectByPrimaryKey(id);
     }

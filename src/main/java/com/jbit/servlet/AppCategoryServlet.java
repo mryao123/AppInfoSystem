@@ -19,6 +19,7 @@ public class AppCategoryServlet {
     @RequestMapping("/categorylevellist")
     @ResponseBody
     public List<AppCategory> qreuyByid(Integer pid){
+
         return appCategoryService.qureyBypid(pid);
     }
 }

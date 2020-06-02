@@ -52,6 +52,7 @@
             <mvc:mapping path="/**"/>
 <!--            登录请求不拦截-->
             <mvc:exclude-mapping path="/dev/login"/>
+            <mvc:exclude-mapping path="/back/login"/>
 <!--            静态资源映射不拦截-->
             <mvc:exclude-mapping path="/statics/**"/>
 <!--            拦截后做的事情  这个是类-->

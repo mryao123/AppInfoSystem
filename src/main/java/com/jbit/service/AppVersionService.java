@@ -22,6 +22,7 @@ public class AppVersionService {
     private DevDictionaryService devDictionaryService;
 
     public AppVersion qureyid(Long vid){
+
         return appVersionMapper.selectByPrimaryKey(vid);
     }
 
@@ -34,7 +35,6 @@ public class AppVersionService {
         criteria.andEqualTo("appid",id);
         List<AppVersion> select = appVersionMapper.selectByExample(example);
         bindAppName(select);
-        System.out.println(select);
         return select;
     }
 
@@ -45,6 +45,14 @@ public class AppVersionService {
         });
     }
 
+    //删除
+    public int delVertion(Long aid){
+        //根version里面的appid删除
+        Example example=new Example(AppVersion.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("appid",aid);
+        return appVersionMapper.deleteByExample(example);
+    }
 
     public void seve(AppVersion appVersion) {
 

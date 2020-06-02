@@ -5,7 +5,7 @@
 	<div class="title_left">
 		<h3>
 			<h3>
-			欢迎你：${userSession.userName }<strong> | 角色：${userSession.userTypeName }</strong>
+			欢迎你：${userSession.username }<strong> | 角色：${userSession.usertypename }</strong>
 			</h3>
 		</h3>
 	</div>

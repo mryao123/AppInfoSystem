@@ -2,6 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<c:if test="${sessionScope.userSession==null}">
+  <script>alert("重新登录");location.href='${pageContext.request.contextPath}/jsp/backendlogin.jsp'</script>
+</c:if>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -48,7 +51,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>${userSession.userCode }</h2>
+                <h2>${userSession.usercode }</h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -58,11 +61,11 @@
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>${userSession.userName }</h3>
+                <h3>${userSession.username }</h3>
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> APP管理 <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="${pageContext.request.contextPath }/manager/backend/app/list">APP审核</a></li>
+                      <li><a href="${pageContext.request.contextPath }/back/applist">APP审核</a></li>
                       <li><a href="javascript:;">广告推广</a></li>
                     </ul>
                   </li>
@@ -115,7 +118,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="${pageContext.request.contextPath }/statics/images/img.jpg" alt="">${userSession.userCode }
+                    <img src="${pageContext.request.contextPath }/statics/images/img.jpg" alt="">${userSession.usercode }
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
