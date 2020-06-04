@@ -46,6 +46,34 @@ public class DevInfoServlet {
     @Autowired
     private AppVersionService appVersionService;
 
+
+    /**
+     * 上架 下架操作
+     * @param id
+     * @param type
+     * @return
+     */
+    @PutMapping("/sale/{id}/{type}")
+    @ResponseBody
+    public jsonresult sale(@PathVariable Long id,@PathVariable String type){
+        AppInfo appInfo = new AppInfo();
+        appInfo.setId(id);
+        if(type.equals("open")){
+            appInfo.setStatus(4L);
+        }else if(type.equals("close")){
+            appInfo.setStatus(5L);
+        }
+        int update = devInfoService.update(appInfo);
+        if(update!=0){
+            return new jsonresult(true);
+        }
+        return new jsonresult(false);
+
+    }
+
+
+
+
     //删除图片
     @RequestMapping("/delfile")
     @ResponseBody

@@ -113,8 +113,8 @@ public class DevInfoService {
         return appInfoMapper.selectByPrimaryKey(id);
     }
 
-    public void update(AppInfo appInfo) {
-        appInfoMapper.updateByPrimaryKeySelective(appInfo);
+    public int update(AppInfo appInfo) {
+       return appInfoMapper.updateByPrimaryKeySelective(appInfo);
     }
 
     public int InfoDel(Long id) {
